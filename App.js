@@ -8,6 +8,8 @@ import HomeScreen from './screens/HomeScreen';
 import AddExpenseScreen from './screens/AddExpenseScreen';
 import GroupsScreen from './screens/GroupsScreen';
 import SettleScreen from './screens/SettleScreen';
+import PremiumScreen from './screens/PremiumScreen';
+import { initializeUserPremium } from './utils/premiumService';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,6 +31,10 @@ export default function App() {
         };
         await AsyncStorage.setItem('billshareData', JSON.stringify(initialData));
       }
+      
+      // Initialize premium/subscription data
+      await initializeUserPremium();
+      
       setIsReady(true);
     } catch (error) {
       console.error('Error initializing data:', error);
@@ -55,6 +61,8 @@ export default function App() {
               iconName = focused ? 'people' : 'people-outline';
             } else if (route.name === 'Settle') {
               iconName = focused ? 'checkmark-done' : 'checkmark-done-outline';
+            } else if (route.name === 'Premium') {
+              iconName = focused ? 'star' : 'star-outline';
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -64,10 +72,31 @@ export default function App() {
           headerShown: true,
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Dashboard' }} />
-        <Tab.Screen name="AddExpense" component={AddExpenseScreen} options={{ title: 'Add Expense' }} />
-        <Tab.Screen name="Groups" component={GroupsScreen} options={{ title: 'Groups' }} />
-        <Tab.Screen name="Settle" component={SettleScreen} options={{ title: 'Settle Up' }} />
+        <Tab.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={{ title: 'Dashboard' }} 
+        />
+        <Tab.Screen 
+          name="AddExpense" 
+          component={AddExpenseScreen} 
+          options={{ title: 'Add Expense' }} 
+        />
+        <Tab.Screen 
+          name="Groups" 
+          component={GroupsScreen} 
+          options={{ title: 'Groups' }} 
+        />
+        <Tab.Screen 
+          name="Settle" 
+          component={SettleScreen} 
+          options={{ title: 'Settle Up' }} 
+        />
+        <Tab.Screen 
+          name="Premium" 
+          component={PremiumScreen} 
+          options={{ title: 'Premium' }} 
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
